@@ -595,39 +595,36 @@ app.delete("/api/checklists/:id", async (req, res) => {
 app.get("/seed", async (req, res) => {
   try {
     const board = await prisma.board.create({
-      data: {
-        title: "Demo Board",
-      },
+      data: { title: "Demo Board" },
     });
 
     const todo = await prisma.list.create({
-      data: { title: "To Do", boardId: board.id },
+      data: { title: "To Do", boardId: board.id, position: 1 },
     });
 
     const progress = await prisma.list.create({
-      data: { title: "In Progress", boardId: board.id },
+      data: { title: "In Progress", boardId: board.id, position: 2 },
     });
 
     const done = await prisma.list.create({
-      data: { title: "Done", boardId: board.id },
+      data: { title: "Done", boardId: board.id, position: 3 },
     });
 
     await prisma.card.createMany({
       data: [
-        { title: "Task 1", listId: todo.id },
-        { title: "Task 2", listId: todo.id },
-        { title: "Task 3", listId: progress.id },
-        { title: "Task 4", listId: done.id },
+        { title: "Task 1", listId: todo.id, position: 1 },
+        { title: "Task 2", listId: todo.id, position: 2 },
+        { title: "Task 3", listId: progress.id, position: 1 },
+        { title: "Task 4", listId: done.id, position: 1 },
       ],
     });
 
     res.json({ message: "Seed successful" });
   } catch (err) {
-    console.error(err);
+    console.error("SEED ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
-
 app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
 });
