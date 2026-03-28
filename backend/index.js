@@ -592,6 +592,50 @@ app.delete("/api/checklists/:id", async (req, res) => {
   }
 });
 
+app.get("/seed", async (req, res) => {
+  try {
+    const board = await prisma.board.create({
+      data: {
+        title: "Demo Board",
+        lists: {
+          create: [
+            {
+              title: "To Do",
+              cards: {
+                create: [
+                  { title: "Task 1" },
+                  { title: "Task 2" }
+                ]
+              }
+            },
+            {
+              title: "In Progress",
+              cards: {
+                create: [
+                  { title: "Task 3" }
+                ]
+              }
+            },
+            {
+              title: "Done",
+              cards: {
+                create: [
+                  { title: "Task 4" }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    });
+
+    res.json({ message: "Seed data created", board });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Seed failed" });
+  }
+});
+
 app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
 });
