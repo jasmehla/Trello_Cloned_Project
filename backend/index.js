@@ -597,42 +597,34 @@ app.get("/seed", async (req, res) => {
     const board = await prisma.board.create({
       data: {
         title: "Demo Board",
-        lists: {
-          create: [
-            {
-              title: "To Do",
-              cards: {
-                create: [
-                  { title: "Task 1" },
-                  { title: "Task 2" }
-                ]
-              }
-            },
-            {
-              title: "In Progress",
-              cards: {
-                create: [
-                  { title: "Task 3" }
-                ]
-              }
-            },
-            {
-              title: "Done",
-              cards: {
-                create: [
-                  { title: "Task 4" }
-                ]
-              }
-            }
-          ]
-        }
-      }
+      },
     });
 
-    res.json({ message: "Seed data created", board });
+    const todo = await prisma.list.create({
+      data: { title: "To Do", boardId: board.id },
+    });
+
+    const progress = await prisma.list.create({
+      data: { title: "In Progress", boardId: board.id },
+    });
+
+    const done = await prisma.list.create({
+      data: { title: "Done", boardId: board.id },
+    });
+
+    await prisma.card.createMany({
+      data: [
+        { title: "Task 1", listId: todo.id },
+        { title: "Task 2", listId: todo.id },
+        { title: "Task 3", listId: progress.id },
+        { title: "Task 4", listId: done.id },
+      ],
+    });
+
+    res.json({ message: "Seed successful" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Seed failed" });
+    res.status(500).json({ error: err.message });
   }
 });
 
