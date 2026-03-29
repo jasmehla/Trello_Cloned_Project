@@ -29,7 +29,7 @@ const useDevProxy = import.meta.env.DEV && !import.meta.env.VITE_API_URL?.trim()
 
 /** Axios: `/api` via Vite proxy in local dev, or `https://your-api.onrender.com/api` when deployed. */
 export const api = axios.create({
-  baseURL: useDevProxy ? "/api" : `${apiOriginRuntime()}/api`,
+  baseURL: useDevProxy ? "/api" : `${apiOriginRuntime()}`,
 });
 
 /** Uploaded files & relative paths → absolute URL (works on phone + desktop when env is set). */
