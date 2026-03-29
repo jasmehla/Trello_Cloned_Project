@@ -638,12 +638,28 @@ app.get("/seed", async (req, res) => {
       data: { title: "Task 4", listId: done.id, position: 1 },
     });
 
+    await prisma.member.createMany({
+      data: [
+        { name: "KID", initials: "K", avatarColor: "blue" },
+        { name: "Ajay", initials: "A", avatarColor: "red" }
+      ]
+    });
+
+    await prisma.label.createMany({
+      data: [
+        { name: "Urgent", color: "red", boardId: board.id },
+        { name: "Feature", color: "green", boardId: board.id }
+      ]
+    });
+
     res.json({ message: "Seed successful" });
+
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Seed failed" });
   }
 });
+
 
 app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
