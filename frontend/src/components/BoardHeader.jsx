@@ -15,6 +15,9 @@ export default function BoardHeader({
   labels,
   members,
 }) {
+  console.log("LABELS:", labels);
+console.log("MEMBERS:", members);
+
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleDraft, setTitleDraft] = useState(board?.title || "");
 
