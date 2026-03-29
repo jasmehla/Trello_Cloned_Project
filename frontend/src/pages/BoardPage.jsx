@@ -127,7 +127,10 @@ export default function BoardPage() {
     (async () => {
       setLoading(true);
       try {
-        const [bRes, mRes] = await Promise.all([api.get(`/boards/${id}`), api.get("/members")]);
+        const [bRes, mRes] = await Promise.all([
+  api.get(`/boards/${id}`),
+  api.get("/members"),
+]);
         if (cancelled) return;
         setBoard(bRes.data);
         setMembers(mRes.data);
