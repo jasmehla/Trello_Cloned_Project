@@ -599,32 +599,52 @@ app.get("/seed", async (req, res) => {
     });
 
     const todo = await prisma.list.create({
-      data: { title: "To Do", boardId: board.id, position: 1 },
+      data: {
+        title: "To Do",
+        boardId: board.id,
+        position: 1,
+      },
     });
 
     const progress = await prisma.list.create({
-      data: { title: "In Progress", boardId: board.id, position: 2 },
+      data: {
+        title: "In Progress",
+        boardId: board.id,
+        position: 2,
+      },
     });
 
     const done = await prisma.list.create({
-      data: { title: "Done", boardId: board.id, position: 3 },
+      data: {
+        title: "Done",
+        boardId: board.id,
+        position: 3,
+      },
     });
 
-    await prisma.card.createMany({
-      data: [
-        { title: "Task 1", listId: todo.id, position: 1 },
-        { title: "Task 2", listId: todo.id, position: 2 },
-        { title: "Task 3", listId: progress.id, position: 1 },
-        { title: "Task 4", listId: done.id, position: 1 },
-      ],
+    await prisma.card.create({
+      data: { title: "Task 1", listId: todo.id, position: 1 },
+    });
+
+    await prisma.card.create({
+      data: { title: "Task 2", listId: todo.id, position: 2 },
+    });
+
+    await prisma.card.create({
+      data: { title: "Task 3", listId: progress.id, position: 1 },
+    });
+
+    await prisma.card.create({
+      data: { title: "Task 4", listId: done.id, position: 1 },
     });
 
     res.json({ message: "Seed successful" });
   } catch (err) {
-    console.error("SEED ERROR:", err);
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
+
 app.use((req, res) => {
   res.status(404).json({ error: "Not found" });
 });
